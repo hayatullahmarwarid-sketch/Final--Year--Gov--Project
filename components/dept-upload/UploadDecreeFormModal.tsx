@@ -52,7 +52,7 @@ export function UploadDecreeFormModal({ visible, categories, onClose, onCreated 
   const { height } = useWindowDimensions();
   const { t } = useAppTranslation();
   const { language } = useAppLanguage();
-  const textDir = language === 'ps' || language === 'prs' ? 'rtl' : 'ltr';
+  const textDir = 'rtl';
 
   const [titlePs, setTitlePs] = useState('');
   const [titleFa, setTitleFa] = useState('');

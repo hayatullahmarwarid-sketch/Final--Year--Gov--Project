@@ -81,7 +81,7 @@ export function AdminSettingsNative() {
   const [platformName, setPlatformName] = useState('Sharia Decrees — National Portal');
   const [supportEmail, setSupportEmail] = useState('platform-ops@decrees.gov.af');
   const [sessionMinutes, setSessionMinutes] = useState(30);
-  const [language, setLanguage] = useState<'en' | 'fa' | 'ps'>('en');
+  const [language, setLanguage] = useState<'fa' | 'ps'>('ps');
   const [timezone, setTimezone] = useState<'Asia/Kabul' | 'Asia/Tehran' | 'UTC'>('Asia/Kabul');
   const [dateFormat, setDateFormat] = useState<'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY-MM-DD'>('DD/MM/YYYY');
   const [reauthDestructive, setReauthDestructive] = useState(true);
@@ -162,8 +162,8 @@ export function AdminSettingsNative() {
       setSessionMinutes(
         Math.max(5, Math.min(240, readSecurityNumber(portal, 'sessionTimeoutMinutes', 30))),
       );
-      const lang = readPortalString(portal, 'defaultLocale', 'en');
-      setLanguage(lang === 'fa' || lang === 'ps' ? lang : 'en');
+      const lang = readPortalString(portal, 'defaultLocale', 'ps');
+      setLanguage(lang === 'fa' ? 'fa' : 'ps');
       const tz = readPortalString(portal, 'timezone', 'Asia/Kabul');
       setTimezone(tz === 'Asia/Tehran' ? 'Asia/Tehran' : tz === 'UTC' ? 'UTC' : 'Asia/Kabul');
       const df = readPortalString(portal, 'dateFormat', 'DD/MM/YYYY');
@@ -502,12 +502,9 @@ export function AdminSettingsNative() {
                   current={
                     language === 'fa'
                       ? t('superSettingsLangDari')
-                      : language === 'ps'
-                        ? t('superSettingsLangPashto')
-                        : t('superSettingsLangEnglish')
+                      : t('superSettingsLangPashto')
                   }
                   options={[
-                    { key: 'en', label: t('superSettingsLangEnglish') },
                     { key: 'fa', label: t('superSettingsLangDari') },
                     { key: 'ps', label: t('superSettingsLangPashto') },
                   ]}

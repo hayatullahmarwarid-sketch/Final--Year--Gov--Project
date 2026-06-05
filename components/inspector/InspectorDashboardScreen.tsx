@@ -102,7 +102,7 @@ export function InspectorDashboardScreen() {
   } = useInspectorWorkspace();
   const [isOnline, setIsOnline] = useState(true);
 
-  const dir = lang === 'en' ? 'ltr' : 'rtl';
+  const dir = 'rtl';
   const horizontal = width < 360 ? 14 : 16;
   const gutter = width >= 768 ? 24 : 16;
   const cap = width >= 900 ? 720 : width >= 768 ? 640 : 560;
@@ -112,7 +112,7 @@ export function InspectorDashboardScreen() {
 
   const displayName = useMemo(() => inspectorDisplayNameFromAccountKey(accountKey), [accountKey]);
   const welcomeLine = displayName ? t.welcomeWithName.replace('{name}', displayName) : t.welcome;
-  const langCode = lang === 'en' ? 'en' : lang === 'ps' ? 'ps' : 'dr';
+  const langCode = lang === 'ps' ? 'ps' : 'dr';
 
   const dashboardTasks = useMemo(() => {
     if (dashboardActivePreviews.length > 0) return dashboardActivePreviews;
@@ -187,7 +187,7 @@ export function InspectorDashboardScreen() {
                 </View>
               </View>
             </View>
-            <View style={[styles.dashboardRight, lang !== 'en' && styles.dashboardRightRtl]}>
+            <View style={[styles.dashboardRight, styles.dashboardRightRtl]}>
               <Pressable
                 onPress={cycleLang}
                 style={({ pressed }) => [styles.langChip, pressed && { opacity: 0.88 }]}
@@ -393,11 +393,11 @@ export function InspectorDashboardScreen() {
                       {inspectorPriorityLabel(lang, task.priority)}
                     </Text>
                   </Text>
-                  <View style={[styles.ctaRow, lang !== 'en' && { flexDirection: 'row-reverse' }]}>
+                  <View style={[styles.ctaRow, { flexDirection: 'row-reverse' }]}>
                     <Text style={styles.ctaText} maxFontSizeMultiplier={1.1}>
                       {ctaFor(task)}
                     </Text>
-                    <Ionicons name={lang === 'en' ? 'chevron-forward' : 'chevron-back'} size={16} color={Brand.green} />
+                    <Ionicons name="chevron-back" size={16} color={Brand.green} />
                   </View>
                 </View>
               </Pressable>

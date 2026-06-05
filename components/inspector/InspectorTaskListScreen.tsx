@@ -56,7 +56,7 @@ function statusStyle(status: InspectorTask['status']) {
   }
 }
 
-function filterChipLabel(lang: 'en' | 'ps' | 'dr', f: TaskStatus | 'all'): string {
+function filterChipLabel(lang: 'ps' | 'dr', f: TaskStatus | 'all'): string {
   const t = INSPECTOR_TRANSLATIONS[lang];
   if (f === 'all') return t.filterAll;
   return inspectorDashboardStatusText(lang, f);

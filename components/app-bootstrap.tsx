@@ -28,11 +28,11 @@ export function AppBootstrap({ children }: { children: React.ReactNode }) {
     Vazirmatn_700Bold,
   });
 
-  const rtl = language !== 'en';
+  const rtl = true;
   const arabicFont = useMemo(() => {
-    if (language === 'en' || !fontsLoaded) return undefined;
+    if (!fontsLoaded) return undefined;
     return ArabicScriptFont.regular;
-  }, [language, fontsLoaded]);
+  }, [fontsLoaded]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -42,7 +42,7 @@ export function AppBootstrap({ children }: { children: React.ReactNode }) {
     }
     if (Platform.OS === 'web' && typeof document !== 'undefined') {
       document.documentElement.setAttribute('dir', rtl ? 'rtl' : 'ltr');
-      document.documentElement.setAttribute('lang', language === 'en' ? 'en' : language === 'prs' ? 'fa' : 'ps');
+      document.documentElement.setAttribute('lang', language === 'prs' ? 'fa' : 'ps');
     }
   }, [hydrated, rtl, language]);
 
@@ -60,8 +60,7 @@ export function AppBootstrap({ children }: { children: React.ReactNode }) {
 
   const ready = hydrated && fontsLoaded;
 
-  /** Same-session layout: English=LTR, Pashto/Dari=RTL. */
-  const dirStyle = { flex: 1, width: '100%' as const, direction: (rtl ? 'rtl' : 'ltr') as 'rtl' | 'ltr' };
+  const dirStyle = { flex: 1, width: '100%' as const, direction: 'rtl' as const };
 
   if (!ready) {
     return (

@@ -65,7 +65,7 @@ export function PendingEditDecreeModal({ visible, decreeId, categories, onClose,
   const { t } = useAppTranslation();
   const insets = useSafeAreaInsets();
   const { language } = useAppLanguage();
-  const textDir = language === 'en' ? 'ltr' : 'rtl';
+  const textDir = 'rtl';
   const [loadErr, setLoadErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [titlePs, setTitlePs] = useState('');
@@ -130,7 +130,7 @@ export function PendingEditDecreeModal({ visible, decreeId, categories, onClose,
   }, [activeCats, categoryId]);
 
   const save = () => {
-    if (!titlePs.trim() || !titleFa.trim() || !titleEn.trim()) return;
+    if (!titlePs.trim() || !titleFa.trim()) return;
     if (!categoryId) return;
     if (loading || loadErr) return;
     const localizedContent = mergeLocalizedContentForEdit(baselineBlocks, contentPs, contentFa, contentEn);
@@ -207,19 +207,6 @@ export function PendingEditDecreeModal({ visible, decreeId, categories, onClose,
                 placeholderTextColor={LABEL_GRAY}
                 textAlignVertical="top"
               />
-              <Text style={styles.peLbl}>
-                {t('uploadTitleEnLabel')}
-                <Text style={styles.peReqStar}>*</Text>
-              </Text>
-              <TextInput
-                value={titleEn}
-                onChangeText={setTitleEn}
-                multiline
-                style={[styles.peInput, styles.peTitleArea]}
-                placeholderTextColor={LABEL_GRAY}
-                textAlignVertical="top"
-              />
-
               <Text style={styles.peLbl}>{t('certCardCategoryLabel')}</Text>
               <View>
                 <Pressable onPress={() => setCatOpen((o) => !o)} style={styles.peCatTrig}>
@@ -287,16 +274,6 @@ export function PendingEditDecreeModal({ visible, decreeId, categories, onClose,
                 textAlignVertical="top"
               />
 
-              <Text style={styles.peLblOptional}>{t('uploadEnglishOptional')}</Text>
-              <TextInput
-                value={contentEn}
-                onChangeText={setContentEn}
-                placeholder={t('deptBodyEnPlaceholder')}
-                placeholderTextColor={LABEL_GRAY}
-                multiline
-                style={[styles.peInput, styles.peAreaTall]}
-                textAlignVertical="top"
-              />
 
               <View style={styles.peActions}>
                 <Pressable onPress={onClose} style={styles.peBtnGhost}>

@@ -11,10 +11,10 @@ type InspectorLangContextValue = {
 const InspectorLangContext = createContext<InspectorLangContextValue | null>(null);
 
 export function InspectorLangProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLang] = useState<InspectorLang>('en');
+  const [lang, setLang] = useState<InspectorLang>('ps');
 
   const cycleLang = () => {
-    setLang((prev) => (prev === 'en' ? 'ps' : prev === 'ps' ? 'dr' : 'en'));
+    setLang((prev) => (prev === 'ps' ? 'dr' : 'ps'));
   };
 
   const value = useMemo(

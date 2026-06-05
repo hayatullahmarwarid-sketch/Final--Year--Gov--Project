@@ -69,7 +69,7 @@ function toGregorianIso(cal: CalendarType, year: number, month: number, day: num
   return gDate.toISOString().slice(0, 10);
 }
 
-function calendarLabel(cal: CalendarType, locale: 'ps' | 'prs' | 'en'): string {
+function calendarLabel(cal: CalendarType, locale: 'ps' | 'prs'): string {
   if (cal === 'hijri') return locale === 'prs' ? 'هجری قمری' : 'هجري لمریز';
   if (cal === 'shamsi') return locale === 'prs' ? 'هجری شمسی' : 'لمریز هجري';
   return locale === 'prs' ? 'میلادی' : 'ميلادي';
@@ -78,7 +78,7 @@ function calendarLabel(cal: CalendarType, locale: 'ps' | 'prs' | 'en'): string {
 export function IslamicDatePicker({ visible, value, onConfirm, onClose }: Props) {
   const { calendarType } = useCalendarType();
   const { language } = useAppLanguage();
-  const locale = (language === 'prs' ? 'prs' : language === 'en' ? 'en' : 'ps') as 'ps' | 'prs' | 'en';
+  const locale = (language === 'prs' ? 'prs' : 'ps') as 'ps' | 'prs';
   const monthNames = getMonthNames(calendarType, locale);
 
   const [year, setYear] = useState(1400);
@@ -224,7 +224,7 @@ export function DatePickerField({
   const [open, setOpen] = useState(false);
   const { calendarType } = useCalendarType();
   const { language } = useAppLanguage();
-  const locale = (language === 'prs' ? 'prs' : language === 'en' ? 'en' : 'ps') as 'ps' | 'prs' | 'en';
+  const locale = (language === 'prs' ? 'prs' : 'ps') as 'ps' | 'prs';
   const monthNames = getMonthNames(calendarType, locale);
 
   let displayValue = placeholder ?? '';

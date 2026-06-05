@@ -31,7 +31,7 @@ export function InspectorProfileScreen() {
   const [roleKey, setRoleKey] = useState<string | null>(null);
   const [assignmentTotal, setAssignmentTotal] = useState<number | null>(null);
 
-  const langLabel = lang === 'en' ? 'English' : lang === 'ps' ? 'پښتو' : 'دری';
+  const langLabel = lang === 'ps' ? 'پښتو' : 'دری';
 
   useEffect(() => {
     let cancelled = false;

@@ -45,7 +45,7 @@ type FormState = {
   contactEmail: string;
   sessionTimeoutMinutes: number;
   sequenceYearlyReset: boolean;
-  interfaceLanguage: 'en' | 'fa' | 'ps';
+  interfaceLanguage: 'fa' | 'ps';
   timezone: 'Asia/Kabul';
   dateFormat: 'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY-MM-DD';
 };
@@ -57,14 +57,13 @@ const INITIAL: FormState = {
   contactEmail: 'admin@decrees.gov.af',
   sessionTimeoutMinutes: 30,
   sequenceYearlyReset: true,
-  interfaceLanguage: 'en',
+  interfaceLanguage: 'ps',
   timezone: 'Asia/Kabul',
   dateFormat: 'DD/MM/YYYY',
 };
 
 const SESSION_OPTS = [15, 30, 45, 60, 120] as const;
 const LANG_OPTS = [
-  { key: 'en' as const, label: 'English' },
   { key: 'fa' as const, label: 'Dari' },
   { key: 'ps' as const, label: 'Pashto' },
 ] as const;
@@ -91,7 +90,7 @@ function mergeLoadedSettings(raw: unknown): FormState {
     sequenceYearlyReset:
       typeof r.sequenceYearlyReset === 'boolean' ? r.sequenceYearlyReset : INITIAL.sequenceYearlyReset,
     interfaceLanguage:
-      r.interfaceLanguage === 'fa' || r.interfaceLanguage === 'ps' || r.interfaceLanguage === 'en'
+      r.interfaceLanguage === 'fa' || r.interfaceLanguage === 'ps'
         ? r.interfaceLanguage
         : INITIAL.interfaceLanguage,
     timezone: 'Asia/Kabul',
@@ -249,7 +248,7 @@ export function DeptUploadDepartmentSettings() {
             sessionTimeoutMinutes: Math.max(15, Math.min(120, Number(value) || INITIAL.sessionTimeoutMinutes)),
           };
         case 'interfaceLanguage':
-          return { ...f, interfaceLanguage: value === 'fa' || value === 'ps' ? value : 'en' };
+          return { ...f, interfaceLanguage: value === 'fa' ? 'fa' : 'ps' };
         case 'dateFormat':
           return {
             ...f,
@@ -395,9 +394,7 @@ export function DeptUploadDepartmentSettings() {
                   <Text style={[styles.selectTxt, { color: c.textPrimary }]}>
                     {form.interfaceLanguage === 'fa'
                       ? t('superSettingsLangDari')
-                      : form.interfaceLanguage === 'ps'
-                        ? t('superSettingsLangPashto')
-                        : t('superSettingsLangEnglish')}
+                      : t('superSettingsLangPashto')}
                   </Text>
                   <Ionicons name="chevron-down" size={18} color={c.textMuted} />
                 </Pressable>
@@ -471,9 +468,7 @@ export function DeptUploadDepartmentSettings() {
                       {picker === 'interfaceLanguage'
                         ? opt === 'fa'
                           ? t('superSettingsLangDari')
-                          : opt === 'ps'
-                            ? t('superSettingsLangPashto')
-                            : t('superSettingsLangEnglish')
+                          : t('superSettingsLangPashto')
                         : picker === 'sessionTimeoutMinutes'
                           ? t('superSettingsMinutes', { n: Number(opt) })
                           : opt}

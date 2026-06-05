@@ -49,7 +49,7 @@ function hydrateTrilingualTitles(d: SerializedDecree): { ps: string; fa: string;
 export default function DeptUploadDecreeDetailScreen() {
   const { t } = useAppTranslation();
   const { language } = useAppLanguage();
-  const textDir = language === 'en' ? 'ltr' : 'rtl';
+  const textDir = 'rtl';
   const { id } = useLocalSearchParams<{ id: string }>();
   const [row, setRow] = useState<SerializedDecree | null>(null);
   const [loading, setLoading] = useState(true);
@@ -213,8 +213,6 @@ export default function DeptUploadDecreeDetailScreen() {
             style={[styles.input, styles.inputTall, { writingDirection: textDir }]}
             textAlignVertical="top"
           />
-          <Text style={styles.label}>{t('uploadTitleEnLabel')}</Text>
-          <TextInput value={editTitleEn} onChangeText={setEditTitleEn} multiline style={[styles.input, styles.inputTall]} textAlignVertical="top" />
           <Pressable onPress={() => void saveTitle()} style={styles.btnSecondary}>
             <Text style={styles.btnSecondaryTxt}>{t('deptSaveTitle')}</Text>
           </Pressable>
@@ -231,7 +229,7 @@ export default function DeptUploadDecreeDetailScreen() {
           <View style={styles.card}>
             <Text style={styles.label}>{t('deptLocalizedDraft')}</Text>
             <Text style={styles.helper}>{t('deptLangEditBlurb')}</Text>
-            <Text style={styles.subLabel}>Pashto (پښتو)</Text>
+            <Text style={styles.subLabel}>پښتو</Text>
             <TextInput
               value={contentPs}
               onChangeText={setContentPs}
@@ -241,22 +239,13 @@ export default function DeptUploadDecreeDetailScreen() {
               textAlignVertical="top"
               editable={!savingLang}
             />
-            <Text style={styles.subLabel}>Dari (دری)</Text>
+            <Text style={styles.subLabel}>دری</Text>
             <TextInput
               value={contentFa}
               onChangeText={setContentFa}
               multiline
               textAlign="right"
               style={[styles.input, styles.inputTall, { writingDirection: textDir }]}
-              textAlignVertical="top"
-              editable={!savingLang}
-            />
-            <Text style={styles.subLabel}>English</Text>
-            <TextInput
-              value={contentEn}
-              onChangeText={setContentEn}
-              multiline
-              style={[styles.input, styles.inputTall]}
               textAlignVertical="top"
               editable={!savingLang}
             />

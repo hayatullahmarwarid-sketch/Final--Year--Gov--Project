@@ -431,7 +431,7 @@ export function EditDecreeModal({ visible, decree, row, categories, onClose, onS
   const insets = useSafeAreaInsets();
   const { t } = useAppTranslation();
   const { language } = useAppLanguage();
-  const textDir = language === 'ps' || language === 'prs' ? 'rtl' : 'ltr';
+  const textDir = 'rtl';
   const [titlePs, setTitlePs] = useState('');
   const [titleFa, setTitleFa] = useState('');
   const [titleEn, setTitleEn] = useState('');

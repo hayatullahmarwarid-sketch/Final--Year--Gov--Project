@@ -139,9 +139,6 @@ export default function SettingsLanguageScreen() {
                   <Text style={[styles.nativeName, { color: titleColor }]} maxFontSizeMultiplier={1.25}>
                     {opt.nativeName}
                   </Text>
-                  <Text style={[styles.englishName, { color: subLabelColor }]} maxFontSizeMultiplier={1.1}>
-                    {opt.englishName}
-                  </Text>
                 </View>
                 <View style={[styles.radioOuter, selected && styles.radioOuterOn]}>
                   {selected ? <Ionicons name="checkmark" size={16} color="#fff" /> : null}

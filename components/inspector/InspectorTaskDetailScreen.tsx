@@ -3,7 +3,6 @@ import { type Href, router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
-  I18nManager,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -14,9 +13,11 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Brand } from '@/constants/brand';
+import { useInspectorLang } from '@/contexts/inspector-lang-context';
 import { useInspectorWorkspace } from '@/contexts/inspector-workspace-context';
 
 import { InspectorBottomNav, inspectorBottomNavOffset } from './InspectorBottomNav';
+import { INSPECTOR_TRANSLATIONS } from './inspector-translations';
 
 type Tab = 'details' | 'instructions' | 'history';
 
@@ -37,6 +38,8 @@ export function InspectorTaskDetailScreen() {
   const insets = useSafeAreaInsets();
   const tabBarOffset = inspectorBottomNavOffset(insets.bottom);
   const horizontalPad = width >= 900 ? Math.max(24, (width - 560) / 2) : width >= 768 ? 32 : 20;
+  const { lang } = useInspectorLang();
+  const ti = INSPECTOR_TRANSLATIONS[lang];
   const { tasks, loading: workspaceLoading } = useInspectorWorkspace();
   const task = tasks.find((t) => t.id === String(id));
   const taskDisplayId = Math.max(
@@ -59,10 +62,10 @@ export function InspectorTaskDetailScreen() {
       <SafeAreaView style={styles.safe} edges={['top']}>
         <View style={styles.loadingRoot}>
           <Text style={styles.missingTxt} maxFontSizeMultiplier={1.15}>
-            Assignment not found. Pull to refresh from the task list.
+            {ti.assignmentNotFound}
           </Text>
           <Pressable onPress={() => router.back()} style={styles.missingBtn} accessibilityRole="button">
-            <Text style={styles.missingBtnTxt}>Go back</Text>
+            <Text style={styles.missingBtnTxt}>{ti.goBack}</Text>
           </Pressable>
         </View>
       </SafeAreaView>
@@ -80,14 +83,14 @@ export function InspectorTaskDetailScreen() {
           </Pressable>
           <View style={{ flex: 1 }}>
             <Text style={styles.topSub} maxFontSizeMultiplier={1.1}>
-              Task Detail
+              {ti.taskDetailHeader}
             </Text>
             <Text style={styles.topId} maxFontSizeMultiplier={1.2}>
               #{taskDisplayId}
             </Text>
           </View>
           <Text style={[styles.prioPill, { backgroundColor: ps.bg, borderColor: ps.border, color: ps.text }]} maxFontSizeMultiplier={1.05}>
-            {task.priority} Priority
+            {task.priority} {ti.prioritySuffix}
           </Text>
         </View>
 
@@ -112,7 +115,7 @@ export function InspectorTaskDetailScreen() {
                 </View>
                 <View>
                   <Text style={styles.metaLabel} maxFontSizeMultiplier={1.05}>
-                    Location
+                    {ti.locationLabel}
                   </Text>
                   <Text style={styles.metaVal} maxFontSizeMultiplier={1.1}>
                     {task.region}
@@ -125,7 +128,7 @@ export function InspectorTaskDetailScreen() {
                 </View>
                 <View>
                   <Text style={styles.metaLabel} maxFontSizeMultiplier={1.05}>
-                    Deadline
+                    {ti.deadline}
                   </Text>
                   <Text style={[styles.metaVal, { color: '#DC2626' }]} maxFontSizeMultiplier={1.1}>
                     {task.deadline}
@@ -139,7 +142,7 @@ export function InspectorTaskDetailScreen() {
             {(['details', 'instructions', 'history'] as const).map((k) => (
               <Pressable key={k} onPress={() => setTab(k)} style={styles.tabBtn} accessibilityRole="tab" accessibilityState={{ selected: tab === k }}>
                 <Text style={[styles.tabText, tab === k && styles.tabTextOn]} maxFontSizeMultiplier={1.1}>
-                  {k === 'details' ? 'Overview' : k === 'instructions' ? 'Guidelines' : 'History'}
+                  {k === 'details' ? ti.overviewTab : k === 'instructions' ? ti.guidelinesTab : ti.historyTab}
                 </Text>
                 {tab === k ? <View style={styles.tabUnderline} /> : null}
               </Pressable>
@@ -152,7 +155,7 @@ export function InspectorTaskDetailScreen() {
                 <View style={styles.panelHeadRow}>
                   <Ionicons name="checkbox-outline" size={14} color={Brand.green} />
                   <Text style={styles.panelHead} maxFontSizeMultiplier={1.1}>
-                    Required Evidence
+                    {ti.requiredEvidence}
                   </Text>
                 </View>
                 {task.requirements.map((req, idx) => (
@@ -175,11 +178,10 @@ export function InspectorTaskDetailScreen() {
                   <Ionicons name="information-circle-outline" size={18} color={Brand.green} style={{ marginTop: 2 }} />
                   <View style={{ flex: 1 }}>
                     <Text style={styles.infoTitle} maxFontSizeMultiplier={1.1}>
-                      System Status
+                      {ti.systemStatus}
                     </Text>
                     <Text style={styles.infoBody} maxFontSizeMultiplier={1.15}>
-                      Complete the inspection using the official template in the form. Evidence and signatures are stored with your
-                      assignment record.
+                      {ti.systemStatusBody}
                     </Text>
                   </View>
                 </View>
@@ -191,32 +193,32 @@ export function InspectorTaskDetailScreen() {
                 <View style={styles.panelHeadRow}>
                   <Ionicons name="alert-circle-outline" size={14} color={Brand.green} />
                   <Text style={styles.panelHead} maxFontSizeMultiplier={1.1}>
-                    Official Instructions
+                    {ti.officialInstructions}
                   </Text>
                 </View>
                 <Text style={styles.instructionsBody} maxFontSizeMultiplier={1.2}>
                   {task.instructions}
                 </Text>
                 <Text style={styles.linkHead} maxFontSizeMultiplier={1.05}>
-                  Linked Resources
+                  {ti.linkedResources}
                 </Text>
                 <Pressable style={styles.linkRow}>
                   <View style={styles.linkLeft}>
                     <Ionicons name="document-text-outline" size={18} color={Brand.green} />
                     <Text style={styles.linkTitle} maxFontSizeMultiplier={1.1}>
-                      Operational Handbook v4.2
+                      {ti.operationalHandbook}
                     </Text>
                   </View>
-                  <Ionicons name={I18nManager.isRTL ? 'chevron-back' : 'chevron-forward'} size={18} color="#D1D5DB" />
+                  <Ionicons name="chevron-back" size={18} color="#D1D5DB" />
                 </Pressable>
                 <Pressable style={styles.linkRow}>
                   <View style={styles.linkLeft}>
                     <Ionicons name="clipboard-outline" size={18} color={Brand.green} />
                     <Text style={styles.linkTitle} maxFontSizeMultiplier={1.1}>
-                      Decree Full Text (English)
+                      {ti.decreeFullText}
                     </Text>
                   </View>
-                  <Ionicons name={I18nManager.isRTL ? 'chevron-back' : 'chevron-forward'} size={18} color="#D1D5DB" />
+                  <Ionicons name="chevron-back" size={18} color="#D1D5DB" />
                 </Pressable>
               </>
             ) : null}
@@ -229,13 +231,13 @@ export function InspectorTaskDetailScreen() {
                   </View>
                   <View style={{ flex: 1, paddingTop: 2 }}>
                     <Text style={styles.tlTitle} maxFontSizeMultiplier={1.1}>
-                      Current status
+                      {ti.currentStatus}
                     </Text>
                     <Text style={styles.tlTime} maxFontSizeMultiplier={1.05}>
                       {task.status.replace(/-/g, ' ')}
                     </Text>
                     <Text style={styles.tlNote} maxFontSizeMultiplier={1.1}>
-                      Detailed audit history is available to administrators in the central system.
+                      {ti.auditHistoryNote}
                     </Text>
                   </View>
                 </View>
@@ -246,7 +248,7 @@ export function InspectorTaskDetailScreen() {
                     </View>
                     <View style={{ flex: 1, paddingTop: 2 }}>
                       <Text style={styles.tlTitle} maxFontSizeMultiplier={1.1}>
-                        Latest review note
+                        {ti.latestReviewNote}
                       </Text>
                       <Text style={styles.tlNote} maxFontSizeMultiplier={1.1}>
                         {task.returnReason}
@@ -268,7 +270,7 @@ export function InspectorTaskDetailScreen() {
             accessibilityRole="button">
             <Ionicons name="play" size={20} color="#fff" />
             <Text style={styles.ctaBtnText} maxFontSizeMultiplier={1.15}>
-              {task.status === 'assigned' ? 'Start Inspection' : 'Resume Work'}
+              {task.status === 'assigned' ? ti.startInspection : ti.resume}
             </Text>
           </Pressable>
         </View>

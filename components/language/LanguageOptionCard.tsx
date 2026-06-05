@@ -40,9 +40,6 @@ export function LanguageOptionCard({ option, selected, onSelect }: LanguageOptio
         <Text style={[styles.nativeName, styles.textPrimary]} maxFontSizeMultiplier={1.35}>
           {option.nativeName}
         </Text>
-        <Text style={[styles.englishName, styles.textPrimaryMuted]} maxFontSizeMultiplier={1.35}>
-          {option.englishName}
-        </Text>
       </View>
       <View
         style={[

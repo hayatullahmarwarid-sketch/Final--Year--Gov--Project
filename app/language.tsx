@@ -14,7 +14,7 @@ import { useAppTranslation } from '@/hooks/use-app-translation';
 import { palette } from '@/lib/theme';
 
 /** Same default locale codes as `portal.supportedLocales` in the API — no network on this screen. */
-const LANGUAGE_OPTIONS: AppLanguageOption[] = orderedLanguageOptionsFromPortal(['ps', 'en', 'fa']);
+const LANGUAGE_OPTIONS: AppLanguageOption[] = orderedLanguageOptionsFromPortal(['ps', 'fa']);
 
 /**
  * Layer: `LanguageScreen` — onboarding language selection (matches brand artboard).
