@@ -1,0 +1,25 @@
+### Sharia Decrees API — local samples (no auth yet)
+@baseUrl = http://localhost:4000
+@api = {{baseUrl}}/api/v1
+
+### Health
+GET {{baseUrl}}/health
+
+### Notifications — list (optional recipient headers for inbox mode)
+GET {{api}}/notifications?page=1&limit=20
+
+### Public — decree catalog
+GET {{api}}/public/decrees?page=1&limit=20
+
+### Public — home feed (optional X-Public-User-Id)
+GET {{api}}/public/home
+
+### Inspectors — assignments (requires X-Inspector-User-Id until JWT)
+GET {{api}}/inspectors/assignments?page=1&limit=20
+X-Inspector-User-Id: 000000000000000000000000
+
+### System admin — dashboard (RBAC enforced later; route exists for contract testing)
+GET {{api}}/dashboards/system-admin
+
+### Files — upload limits
+GET {{api}}/files/limits

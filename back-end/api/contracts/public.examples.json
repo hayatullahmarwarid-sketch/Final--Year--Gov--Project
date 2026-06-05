@@ -1,0 +1,171 @@
+{
+  "module": "public",
+  "basePath": "/api/v1/public",
+  "identity": {
+    "headers": {
+      "X-Public-User-Id": "24-character hex Mongo ObjectId for the future `public_user` actor (optional if PUBLIC_API_STANDALONE_USER_ID is set)."
+    },
+    "env": {
+      "PUBLIC_API_STANDALONE_USER_ID": "Optional dev default for the same actor when the header is omitted."
+    }
+  },
+  "examples": {
+    "GET /home?locale=ps": {
+      "response": {
+        "success": true,
+        "data": {
+          "locale": "ps",
+          "featuredDecrees": [
+            {
+              "id": "6610f2b2f2b2f2b2f2b2f2b2",
+              "decreeNumber": "1445-01",
+              "titleSummary": "Sample decree title",
+              "status": "active",
+              "categories": [],
+              "currentPublishedVersion": null
+            }
+          ],
+          "announcements": [
+            {
+              "id": "6610f2b2f2b2f2b2f2b2f2c1",
+              "slug": "eid-hours",
+              "title": "Holiday counter hours",
+              "excerpt": "Public counters will observe…",
+              "publishedAt": "2026-04-01T08:00:00.000Z",
+              "sortOrder": 0
+            }
+          ],
+          "upcomingExams": [
+            {
+              "id": "6610f2b2f2b2f2b2f2b2f2d1",
+              "title": "Decree literacy quiz",
+              "status": "open",
+              "scheduledOpensAt": "2026-04-10T06:00:00.000Z",
+              "scheduledClosesAt": "2026-04-20T18:00:00.000Z",
+              "passingScore": 70,
+              "maxScore": 100,
+              "questionsCount": 12
+            }
+          ],
+          "summary": {
+            "activeDecreeCount": 128,
+            "openExamCount": 3,
+            "unreadNotificationCount": 2
+          },
+          "settingsHints": {
+            "defaultLocale": "ps",
+            "supportedLocales": ["ps", "en", "fa"],
+            "publicSiteName": "Sharia Decrees"
+          }
+        }
+      }
+    },
+    "GET /decrees?categoryId=6610f2b2f2b2f2b2f2b2f2aa&keyword=mosque&language=ps&status=active&page=1&limit=20": {
+      "response": {
+        "success": true,
+        "data": [],
+        "meta": { "page": 1, "limit": 20, "total": 0, "totalPages": 1 }
+      }
+    },
+    "POST /bookmarks": {
+      "request": { "decreeId": "6610f2b2f2b2f2b2f2b2f2b2" },
+      "response": {
+        "success": true,
+        "data": {
+          "id": "6610f2b2f2b2f2b2f2b2f2e1",
+          "decreeId": "6610f2b2f2b2f2b2f2b2f2b2",
+          "ownerUserId": "6610f2b2f2b2f2b2f2b2f2f1",
+          "decree": {
+            "id": "6610f2b2f2b2f2b2f2b2f2b2",
+            "decreeNumber": "1445-01",
+            "titleSummary": "Sample decree title",
+            "status": "active",
+            "publishedAt": "2026-03-01T10:00:00.000Z"
+          }
+        }
+      }
+    },
+    "POST /exam-attempts": {
+      "request": { "examId": "6610f2b2f2b2f2b2f2b2f2d1" },
+      "response": {
+        "success": true,
+        "data": {
+          "resumed": false,
+          "attempt": {
+            "id": "6610f2b2f2b2f2b2f2b2f2d9",
+            "examId": "6610f2b2f2b2f2b2f2b2f2d1",
+            "examineeUserId": "6610f2b2f2b2f2b2f2b2f2f1",
+            "status": "in_progress",
+            "startedAt": "2026-04-19T12:00:00.000Z"
+          },
+          "exam": { "id": "6610f2b2f2b2f2b2f2b2f2d1", "title": "Decree literacy quiz", "status": "open" },
+          "questions": [
+            {
+              "id": "6610f2b2f2b2f2b2f2b2f2d2",
+              "order": 0,
+              "type": "multiple_choice",
+              "stem": "Which body issues final gazette text?",
+              "explanation": null,
+              "options": [
+                { "optionKey": "a", "label": "Option A" },
+                { "optionKey": "b", "label": "Option B" }
+              ],
+              "points": 5
+            }
+          ]
+        }
+      }
+    },
+    "POST /exam-attempts/:id/submit": {
+      "request": {
+        "answers": [
+          {
+            "questionId": "6610f2b2f2b2f2b2f2b2f2d2",
+            "selectedOptionKeys": ["a"]
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "data": {
+          "attempt": {
+            "id": "6610f2b2f2b2f2b2f2b2f2d9",
+            "status": "graded",
+            "score": 5,
+            "maxScore": 5,
+            "passed": true
+          },
+          "exam": { "id": "6610f2b2f2b2f2b2f2b2f2d1", "title": "Decree literacy quiz", "status": "open" },
+          "score": 5,
+          "maxScore": 5,
+          "passed": true,
+          "passingThreshold": { "passingScore": 70, "maxScore": 5, "source": "exam" }
+        }
+      }
+    },
+    "GET /certificates/:id": {
+      "response": {
+        "success": true,
+        "data": {
+          "id": "6610f2b2f2b2f2b2f2b2f2e9",
+          "certificateNumber": "CERT-2026-000045",
+          "kind": "exam_pass",
+          "status": "issued",
+          "passingThreshold": { "passingScore": 70, "maxScore": 100, "source": "exam" },
+          "sourceExamId": "6610f2b2f2b2f2b2f2b2f2d1"
+        }
+      }
+    },
+    "GET /profile": {
+      "response": {
+        "success": true,
+        "data": {
+          "displayName": null,
+          "accountStatus": "placeholder",
+          "ownerUserId": "6610f2b2f2b2f2b2f2b2f2f1",
+          "message": "Profile is not provisioned yet…"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+
+# Disposable scratch / partial extract of the Sharia Decrees zip (not the live app)
+_zip_extract/
+temp-sharia-decrees-zip-extract/
+
+# Full extracted reference copy: Vite app `sharia-decrees-app` (public + admin + inspector UI from zip)
+_zip_extract_complete/
+reference-sharia-decrees-vite-full-extract/
+
+# Optional backup zip at repo root — never imported by app code or builds; safe to delete if redundant
+complete__project.zip
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files
+.env*.local
+
+# typescript
+*.tsbuildinfo
+
+app-example
+
+# generated native folders
+/ios
+/android

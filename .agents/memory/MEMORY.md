@@ -1,0 +1,5 @@
+- [AppSwitch RTL fix](appswitch-rtl.md) — thumb direction must use useAppLanguage() hook, NOT I18nManager.isRTL
+- [Calendar date system](calendar-dates.md) — Hijri + Shamsi utilities in lib/hijri-date.ts; CalendarTypeProvider in app/_layout.tsx; default is 'shamsi'
+- [English language removal](english-removal.md) — 'en' kept in AppLanguageId type for storage compat; removed from APP_LANGUAGES array; readDeviceLanguage no longer returns 'en'
+- [Upload form English fields](upload-form-english.md) — English title/content/category fields removed from UploadDecreeFormModal and EditDecreeModal; Pashto name is now primary for category creation; titleEn sent as '' to backend
+- [Exam results enrichment](exam-results-questions.md) — getExamAttemptById now returns questionsWithAnswers[] (stem, options, correct/selected keys); results.tsx shows expandable per-question review

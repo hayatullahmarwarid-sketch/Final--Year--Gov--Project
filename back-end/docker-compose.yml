@@ -1,0 +1,122 @@
+# Local-parity compose for the Sharia Decrees API.
+#
+#   docker compose up --build
+#
+# Services:
+#   - api        Express server (src/server.js)
+#   - worker     BullMQ worker (src/worker.js)
+#   - mongo      Single-node replica set (transactions available)
+#   - redis      Shared queue + rate-limit + cache backend
+#   - mailpit    Local SMTP catcher (HTTP UI on :8025)
+#
+# Persistent volumes keep Mongo + uploads across `docker compose down`.
+
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    # --replSet + one-shot init below turn this single node into a replicaset so transactions work.
+    command:
+      - --replSet=rs0
+      - --bind_ip_all
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 3s
+      retries: 20
+
+  mongo-init:
+    image: mongo:7
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: "no"
+    entrypoint: >
+      mongosh --host mongo:27017 --quiet --eval
+      "try { rs.status() } catch (e) { rs.initiate({ _id: 'rs0', members: [{ _id: 0, host: 'mongo:27017' }] }) }"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      mongo-init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      MONGODB_URI: mongodb://mongo:27017/sharia_decrees?replicaSet=rs0
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: change-me-local-compose-only
+      JWT_REFRESH_SECRET: change-me-refresh-local-compose-only
+      CORS_ORIGIN: "*"
+      STORAGE_PROVIDER: disk
+      UPLOAD_DIR: /app/uploads
+      LOG_LEVEL: info
+      RATE_LIMIT_ENABLED: "true"
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
+      SMTP_SECURE: "false"
+      SMTP_TLS_REJECT_UNAUTHORIZED: "false"
+      MAIL_FROM: "Sharia Decrees <noreply@local.test>"
+    ports:
+      - "4000:4000"
+    volumes:
+      - uploads_data:/app/uploads
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      mongo-init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    command: ["node", "src/worker.js"]
+    environment:
+      NODE_ENV: development
+      MONGODB_URI: mongodb://mongo:27017/sharia_decrees?replicaSet=rs0
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: change-me-local-compose-only
+      JWT_REFRESH_SECRET: change-me-refresh-local-compose-only
+      STORAGE_PROVIDER: disk
+      UPLOAD_DIR: /app/uploads
+      LOG_LEVEL: info
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
+      SMTP_SECURE: "false"
+      SMTP_TLS_REJECT_UNAUTHORIZED: "false"
+      MAIL_FROM: "Sharia Decrees <noreply@local.test>"
+    volumes:
+      - uploads_data:/app/uploads
+
+volumes:
+  mongo_data:
+  uploads_data:

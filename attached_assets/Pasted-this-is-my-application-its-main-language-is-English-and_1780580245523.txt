@@ -1,0 +1,16 @@
+this is my application its main language is English and have localization for Pashto and Dari languages also.
+So my teachers decide to delete the entire application English language and make the application main language Pashto/Dari.
+So the first task is to delete the entire English language from the application
+second task there are many more elements that are in three languages for example 
+when create a Decree Category user should enter the English, Pashto and Dari Titles of the Category and many more times things like these upon; so by the way delete those elements also that take somethings from user in English language only Pashto and Dari should be remain ever.
+Third task the Pashto and Dari languages words and sentences that are need to used in my application should be more common, to know every person very common word very usual words and sentences. 
+Fourth task my application has date everywhere so it’s currently Gregorian date so instead of it use the Hijri and Shamsi from both users can choose and select over the calendar or write by self.
+ 
+
+Fifth task My application has toggle buttons in settings and many more places in every user role 
+so the toggle buttons have a white circle when click it to turn on its circle goes to right side in Pashto/Dari interface language it should go to left side and be never override.
+Sixth task my application have exams when public user give exam after the exam instantly user see the result screen it contains pass, fail, score, correct questions count, wrong solved questions count, missed questions count and more my teacher said if the correct answered, wrong solved questions, missed questions they each one should have a drop down list of that question that which was solve and how solve and how was wished to be solve so this help the user the which questions he solve correct and have and can know which questions I solved wrong and how was wish to be solved and which was missed and what was their correct answer. 
+after that public user setting also have the exam history when click on view to see how much question I solved, unsolved, wrong solved over that history it should be also added to see the user again and again whenever he wants.
+everything’s should be real, real workflow correct work and real data 
+
+

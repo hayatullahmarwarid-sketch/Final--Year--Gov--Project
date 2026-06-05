@@ -1,0 +1,49 @@
+{
+  "auth": {
+    "login.invalid_credentials": "بریښنالیک یا پټنوم سم نه دی",
+    "login.rate_limited": "ډېرې هڅې مو وکړې — لږ وروسته بیا هڅه وکړئ",
+    "register.duplicate": "بریښنالیک یا ټیلفون دمخه ثبت شوی دی",
+    "session.missing": "د بېرر ټوکن نشته",
+    "session.expired": "د لاسرسي ټوکن پای ته رسېدلی دی",
+    "session.invalid": "ناسم یا د پای وخت تېر شوی لاسرسي ټوکن",
+    "refresh.invalid": "ناسم یا د پای وخت تېر شوی تازه ټوکن",
+    "refresh.reuse_detected": "ناسته لا معتبره نه ده — مهرباني وکړئ بیا ننوځئ"
+  },
+  "errors": {
+    "validation": "د معلوماتو ازموینه ناکامه شوه",
+    "not_found": "سرچینه ونه موندل شوه",
+    "forbidden": "کافي اجازې نشته",
+    "rate_limited": "ډېرې غوښتنې — یو څه ورو کړئ او بیا هڅه وکړئ",
+    "internal": "د سرور ناڅاپي تېروتنه",
+    "service_unavailable": "خدمت لنډمهاله شتون نلري"
+  },
+  "files": {
+    "upload.too_large": "دوتنه د اجازې څخه لوی حجم لري",
+    "upload.missing": "دوتنه ورنه کړه — د \"file\" څخه ولېږئ"
+  },
+  "notifications": {
+    "exam.passed.title": "مبارک وي — کامیاب شوئ!",
+    "exam.passed.body": "تاسو {{examTitle}} د {{score}}% سره کامیاب کړئ.",
+    "exam.failed.title": "د ازموینې پایله",
+    "exam.failed.body": "تاسو دا ځل په {{examTitle}} کې کامیاب نه شوئ. پایله: {{score}}%.",
+    "certificate.issued.title": "ستاسو تصدیقنامه چمتو ده",
+    "certificate.issued.body": "تصدیقنامه {{certificateNumber}} صادره شوه.",
+    "inspection.assigned.title": "نوې د پلټنې دنده",
+    "inspection.assigned.body": "تاسو ته یوه پلټنه سپارل شوې ده چې د {{dueAt}} پورې وي.",
+    "inspection.due_soon.title": "پلټنه ډېر ژر پای ته رسېږي",
+    "inspection.due_soon.body": "ستاسو پلټنه د {{dueAt}} پورې ده.",
+    "decree.published.title": "نوې پریکړه خپره شوه",
+    "decree.published.body": "{{decreeTitle}} اوس شتون لري."
+  },
+  "email": {
+    "verify.subject": "خپل بریښنالیک تایید کړئ",
+    "verify.body.greeting": "سلامونه {{displayName}},",
+    "verify.body.instruction": "د خپل بریښنالیک تایید لپاره لاندې کوډ وکاروئ:",
+    "verify.body.link_prefix": "یا دا لینک خلاص کړئ (ژر پای ته رسېږي):",
+    "verify.body.footer": "که چېرته دا غوښتنه نه وه، دا پیغام له پامه وغورځوئ.",
+    "password_reset.subject": "خپل پټنوم بیا تنظیم کړئ",
+    "password_reset.body.instruction": "د پټنوم د بیا تنظیمولو لپاره لاندې کوډ وکاروئ (ژر پای ته رسېږي):",
+    "password_reset.body.link_prefix": "یا دا لینک خلاص کړئ:",
+    "password_reset.body.footer": "که چېرته تاسو دا غوښتنه نه وه کړې، دا بریښنالیک له پامه وغورځوئ."
+  }
+}

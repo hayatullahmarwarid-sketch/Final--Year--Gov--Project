@@ -1,0 +1,38 @@
+/**
+ * Route map for `/api/v1/inspector-admin` (paired with `inspector-admin.routes.js`).
+ * Useful for OpenAPI generation and client scaffolding.
+ */
+export const INSPECTOR_ADMIN_ROUTE_MAP = Object.freeze([
+  { method: 'GET', path: '/_meta', summary: 'Module metadata (unauthenticated in dev; keep outside RBAC if needed).' },
+  { method: 'GET', path: '/templates', summary: 'List inspection templates.' },
+  { method: 'POST', path: '/templates', summary: 'Create inspection template.' },
+  { method: 'GET', path: '/templates/:id', summary: 'Get inspection template by id.' },
+  { method: 'PATCH', path: '/templates/:id', summary: 'Update inspection template (bumps revision when sections change).' },
+  { method: 'DELETE', path: '/templates/:id', summary: 'Soft-delete inspection template.' },
+  { method: 'GET', path: '/assignments', summary: 'List inspection assignments.' },
+  { method: 'POST', path: '/assignments', summary: 'Create inspection assignment.' },
+  { method: 'GET', path: '/assignments/:id', summary: 'Get inspection assignment by id.' },
+  { method: 'PATCH', path: '/assignments/:id', summary: 'Update scheduling / region / priority / notes.' },
+  { method: 'GET', path: '/submissions', summary: 'List inspection submissions for review.' },
+  { method: 'GET', path: '/submissions/:id', summary: 'Get submission with assignment context.' },
+  { method: 'POST', path: '/submissions/:id/return', summary: 'Return submission for revision (SRS states).' },
+  { method: 'POST', path: '/submissions/:id/finalize', summary: 'Finalize submission and persist reporting snapshot.' },
+  { method: 'GET', path: '/exams', summary: 'List exams.' },
+  { method: 'POST', path: '/exams', summary: 'Create exam (draft).' },
+  { method: 'GET', path: '/exams/:id', summary: 'Get exam by id.' },
+  { method: 'PATCH', path: '/exams/:id', summary: 'Patch exam fields and lifecycle status.' },
+  { method: 'GET', path: '/exams/:examId/questions', summary: 'List exam questions (admin, includes inactive).' },
+  { method: 'POST', path: '/exams/:examId/questions', summary: 'Create exam question.' },
+  { method: 'PATCH', path: '/exams/:examId/questions/:questionId', summary: 'Update exam question.' },
+  { method: 'DELETE', path: '/exams/:examId/questions/:questionId', summary: 'Soft-delete exam question.' },
+  { method: 'GET', path: '/exam-attempts', summary: 'List graded/submitted exam attempts (admin).' },
+  { method: 'PATCH', path: '/exam-attempts/:id/grade', summary: 'Apply manual scores for essay questions; finalize when complete.' },
+  { method: 'GET', path: '/inspectors', summary: 'List inspector-role staff accounts.' },
+  { method: 'PATCH', path: '/inspectors/:id', summary: 'Activate or suspend an inspector account.' },
+  { method: 'GET', path: '/operational-reports', summary: 'Operational signals derived from assignments & certificates.' },
+  { method: 'GET', path: '/reports/implementation', summary: 'Finalized inspection implementation metrics (filters).' },
+  { method: 'GET', path: '/reports/inspector-performance', summary: 'Inspector finalized workload counts.' },
+  { method: 'GET', path: '/certificates', summary: 'List certificates.' },
+  { method: 'POST', path: '/certificates/:id/revoke', summary: 'Revoke an issued certificate.' },
+  { method: 'GET', path: '/dashboard', summary: 'Inspector admin dashboard & implementation trends.' },
+]);

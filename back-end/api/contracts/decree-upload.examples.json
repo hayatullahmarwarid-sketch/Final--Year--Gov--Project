@@ -1,0 +1,136 @@
+{
+  "basePath": "/api/v1/decree-upload",
+  "examples": {
+    "createCategory": {
+      "request": {
+        "method": "POST",
+        "path": "/categories",
+        "body": {
+          "slug": "family-law",
+          "name": "Family law",
+          "namePs": "کورنۍ قانون",
+          "description": "Domestic relations decrees",
+          "sortOrder": 10,
+          "isActive": true,
+          "tenantId": null
+        }
+      },
+      "response": {
+        "success": true,
+        "data": {
+          "id": "6620f0f0f0f0f0f0f0f0f0f0",
+          "slug": "family-law",
+          "name": "Family law",
+          "namePs": "کورنۍ قانون",
+          "description": "Domestic relations decrees",
+          "parentCategoryId": null,
+          "sortOrder": 10,
+          "isActive": true,
+          "tenantId": null,
+          "isDeleted": false,
+          "createdAt": "2026-04-19T10:00:00.000Z",
+          "updatedAt": "2026-04-19T10:00:00.000Z"
+        },
+        "message": "Category created"
+      }
+    },
+    "createDecree": {
+      "request": {
+        "method": "POST",
+        "path": "/decrees",
+        "body": {
+          "decreeNumber": "1445-01",
+          "titleSummary": "Marriage registration procedures",
+          "categoryIds": ["6620f0f0f0f0f0f0f0f0f0f0"],
+          "tagKeys": ["registration", "nikah"],
+          "visibility": "public",
+          "tenantId": null,
+          "metadata": { "gazettePage": 12 },
+          "initialVersion": {
+            "changeSummary": "Initial draft",
+            "effectiveFrom": "2026-01-01T00:00:00.000Z",
+            "localizedContent": [
+              {
+                "locale": "ps",
+                "title": "د نکاح ثبت لارښود",
+                "bodyPlain": "…"
+              },
+              { "locale": "en", "title": "Marriage registration", "bodyPlain": "…" }
+            ]
+          }
+        }
+      },
+      "response": {
+        "success": true,
+        "data": {
+          "id": "6620f1f1f1f1f1f1f1f1f1f1",
+          "decreeNumber": "1445-01",
+          "titleSummary": "Marriage registration procedures",
+          "status": "draft",
+          "metadataCompleteness": {
+            "score": 100,
+            "missingKeys": [],
+            "evaluatedAt": "2026-04-19T10:05:00.000Z"
+          }
+        },
+        "message": "Decree created"
+      }
+    },
+    "patchDecreeDraftVersion": {
+      "request": {
+        "method": "PATCH",
+        "path": "/decrees/6620f1f1f1f1f1f1f1f1f1f1",
+        "body": {
+          "titleSummary": "Marriage registration (updated summary)",
+          "draftVersion": {
+            "localizedContent": [
+              { "locale": "ps", "title": "عنوان", "bodyPlain": "متن" },
+              { "locale": "en", "title": "Title", "bodyPlain": "Text" }
+            ]
+          }
+        }
+      }
+    },
+    "publishDecree": {
+      "request": {
+        "method": "POST",
+        "path": "/decrees/6620f1f1f1f1f1f1f1f1f1f1/publish",
+        "body": {
+          "effectiveFrom": "2026-01-01T00:00:00.000Z"
+        }
+      },
+      "response": {
+        "success": true,
+        "message": "Decree version published"
+      }
+    },
+    "createAmendment": {
+      "request": {
+        "method": "POST",
+        "path": "/decrees/6620f1f1f1f1f1f1f1f1f1f1/amendments",
+        "body": {
+          "changeSummary": "Clarify article 3 wording",
+          "copyFromVersionId": null
+        }
+      },
+      "response": {
+        "success": true,
+        "message": "Amendment draft created"
+      }
+    },
+    "listDecreesQuery": {
+      "method": "GET",
+      "path": "/decrees?page=1&limit=20&status=active&search=registration&sort=-publishedAt&categoryId=6620f0f0f0f0f0f0f0f0f0f0"
+    },
+    "supersedeDecree": {
+      "request": {
+        "method": "POST",
+        "path": "/decrees/6620f1f1f1f1f1f1f1f1f1f1/supersede",
+        "body": {
+          "supersedingDecreeId": "6620f2f2f2f2f2f2f2f2f2f2",
+          "reason": "Replaced by consolidated decree 1445-02"
+        }
+      }
+    }
+  }
+}

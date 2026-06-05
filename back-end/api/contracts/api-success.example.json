@@ -1,0 +1,13 @@
+{
+  "success": true,
+  "message": "Optional human-readable summary for the operation",
+  "data": {
+    "example": "Any JSON-serializable payload"
+  },
+  "meta": {
+    "page": 1,
+    "limit": 20,
+    "total": 0,
+    "totalPages": 1
+  }
+}

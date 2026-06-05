@@ -1,0 +1,49 @@
+{
+  "auth": {
+    "login.invalid_credentials": "ایمیل یا رمز عبور نامعتبر است",
+    "login.rate_limited": "تلاش‌های زیاد — لطفاً بعداً دوباره امتحان کنید",
+    "register.duplicate": "ایمیل یا شماره تلفن قبلاً ثبت شده است",
+    "session.missing": "توکن Bearer موجود نیست",
+    "session.expired": "توکن دسترسی منقضی شده است",
+    "session.invalid": "توکن دسترسی نامعتبر یا منقضی شده",
+    "refresh.invalid": "توکن تازه‌سازی نامعتبر یا منقضی شده",
+    "refresh.reuse_detected": "نشست دیگر معتبر نیست — لطفاً مجدداً وارد شوید"
+  },
+  "errors": {
+    "validation": "اعتبارسنجی ناموفق بود",
+    "not_found": "منبع یافت نشد",
+    "forbidden": "مجوز کافی ندارید",
+    "rate_limited": "تعداد درخواست‌ها زیاد است — کمی صبر کنید و دوباره تلاش کنید",
+    "internal": "خطای غیرمنتظره در سرور",
+    "service_unavailable": "سرویس به‌طور موقت در دسترس نیست"
+  },
+  "files": {
+    "upload.too_large": "حجم فایل از حد مجاز بیشتر است",
+    "upload.missing": "فایلی ارسال نشده — فیلد \"file\" را در چندبخشی بفرستید"
+  },
+  "notifications": {
+    "exam.passed.title": "تبریک — قبول شدید!",
+    "exam.passed.body": "شما در {{examTitle}} با {{score}}% قبول شدید.",
+    "exam.failed.title": "نتیجه آزمون",
+    "exam.failed.body": "این بار در {{examTitle}} قبول نشدید. نمره: {{score}}%.",
+    "certificate.issued.title": "گواهی شما آماده است",
+    "certificate.issued.body": "گواهی {{certificateNumber}} صادر شد.",
+    "inspection.assigned.title": "تکلیف بازرسی جدید",
+    "inspection.assigned.body": "یک بازرسی با مهلت {{dueAt}} به شما محول شد.",
+    "inspection.due_soon.title": "مهلت بازرسی نزدیک است",
+    "inspection.due_soon.body": "مهلت بازرسی شما {{dueAt}} است.",
+    "decree.published.title": "فرمان جدید منتشر شد",
+    "decree.published.body": "{{decreeTitle}} اکنون در دسترس است."
+  },
+  "email": {
+    "verify.subject": "ایمیل خود را تأیید کنید",
+    "verify.body.greeting": "سلام {{displayName}},",
+    "verify.body.instruction": "برای تأیید آدرس ایمیل از کد زیر استفاده کنید:",
+    "verify.body.link_prefix": "یا این پیوند را باز کنید (به‌زودی منقضی می‌شود):",
+    "verify.body.footer": "اگر این درخواست از سوی شما نبوده، این پیام را نادیده بگیرید.",
+    "password_reset.subject": "رمز عبور خود را بازنشانی کنید",
+    "password_reset.body.instruction": "برای بازنشانی رمز عبور از کد زیر استفاده کنید (به‌زودی منقضی می‌شود):",
+    "password_reset.body.link_prefix": "یا این پیوند را باز کنید:",
+    "password_reset.body.footer": "اگر شما بازنشانی رمز عبور را درخواست نکرده‌اید، این ایمیل را نادیده بگیرید."
+  }
+}

@@ -1,0 +1,378 @@
+openapi: 3.0.3
+info:
+  title: Sharia Decrees API
+  version: 1.0.0
+  description: |
+    Production REST API for the Sharia Decrees mobile application. JWT-authenticated,
+    five-role RBAC, cloud-ready storage, BullMQ background jobs.
+servers:
+  - url: http://localhost:4000
+    description: Local dev
+paths:
+  /health:
+    get:
+      summary: Liveness probe (always 200 while the process is alive)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSuccessHealth'
+  /health/ready:
+    get:
+      summary: Readiness probe (503 when Mongo / Redis are unavailable)
+      responses:
+        '200': { description: Ready }
+        '503': { description: Dependencies unhealthy }
+  /metrics:
+    get:
+      summary: Prometheus metrics (gated by METRICS_TOKEN bearer)
+      responses:
+        '200': { description: Metrics text }
+        '401': { description: Unauthorized }
+        '404': { description: Metrics disabled }
+  /api/v1/auth/register:
+    post:
+      summary: Register a public user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, minLength: 10 }
+                displayName: { type: string }
+                preferredLanguage: { type: string, enum: [en, ps, fa] }
+      responses:
+        '201': { description: Created }
+        '409': { description: Conflict }
+        '429': { description: Rate limited }
+  /api/v1/auth/login:
+    post:
+      summary: Log in with email + password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+                deviceInfo: { type: string }
+      responses:
+        '200': { description: OK }
+        '401': { description: Invalid credentials }
+        '429': { description: Rate limited }
+  /api/v1/auth/refresh:
+    post:
+      summary: Rotate access + refresh tokens (refresh-reuse detection enforced)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken: { type: string }
+      responses:
+        '200': { description: OK }
+        '401': { description: Invalid or reused refresh token }
+  /api/v1/auth/logout:
+    post:
+      summary: Revoke a single refresh token
+      responses:
+        '200': { description: OK }
+  /api/v1/auth/me:
+    get:
+      summary: Current authenticated user
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: OK }
+        '401': { description: Missing / invalid token }
+  /api/v1/uploads:
+    post:
+      summary: Upload a binary (multipart) and persist a StoredFile record with sha256 dedup
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: query
+          name: purpose
+          schema: { type: string }
+        - in: query
+          name: folder
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file: { type: string, format: binary }
+      responses:
+        '201': { description: Uploaded }
+        '413': { description: Payload too large }
+  /api/v1/files/{id}/url:
+    get:
+      summary: Resolve a (signed) URL for a stored file
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+  /api/v1/devices:
+    post:
+      summary: Register a device push token
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [platform, token]
+              properties:
+                platform: { type: string, enum: [ios, android, web] }
+                provider: { type: string, enum: [expo, fcm, apns], default: expo }
+                token: { type: string }
+                deviceName: { type: string }
+                appVersion: { type: string }
+                locale: { type: string }
+      responses:
+        '201': { description: Registered }
+  /api/v1/inspectors/sync:
+    post:
+      summary: Batch-apply offline inspector draft / submit ops with conflict detection
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ops]
+              properties:
+                ops:
+                  type: array
+                  items:
+                    type: object
+                    required: [clientOpId, assignmentId]
+                    properties:
+                      clientOpId: { type: string }
+                      assignmentId: { type: string }
+                      kind: { type: string, enum: [save_draft, submit], default: save_draft }
+                      answers: { type: array, items: { type: object } }
+                      submissionKind: { type: string, enum: [autosave_draft, manual_draft] }
+                      lastKnownRevision: { type: integer }
+                      clientRequestId: { type: string }
+      responses:
+        '200': { description: Per-op results }
+  /api/v1/certificates/verify:
+    get:
+      summary: Stateless public verification of a certificate via signed token
+      parameters:
+        - in: query
+          name: token
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Certificate metadata }
+        '404': { description: Not found / invalid token }
+  /api/v1/notifications:
+    get:
+      summary: List notifications (paginated)
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1, default: 1 }
+        - in: query
+          name: pageSize
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Create notification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, body]
+              properties:
+                title: { type: string }
+                body: { type: string }
+                channel: { type: string, enum: [in_app, push, email] }
+                recipientRoleKey:
+                  type: string
+                  enum: [public_user, inspector, system_admin, decree_upload_department, inspector_admin]
+      responses:
+        '201':
+          description: Created
+  /api/v1/files/limits:
+    get:
+      summary: Upload limits (bytes cap)
+      responses:
+        '200':
+          description: OK
+  /api/v1/files:
+    get:
+      summary: List stored file metadata (paginated)
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - in: query
+          name: purpose
+          schema: { type: string }
+        - in: query
+          name: provider
+          schema: { type: string }
+        - in: query
+          name: linkedEntityType
+          schema: { type: string }
+        - in: query
+          name: linkedEntityId
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Register file metadata (no binary upload)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [originalName, mimeType, size, provider, providerFileId, purpose]
+              properties:
+                originalName: { type: string }
+                mimeType: { type: string }
+                size: { type: integer, minimum: 0 }
+                provider: { type: string, description: 'e.g. none, imagekit, s3' }
+                providerFileId: { type: string }
+                url: { type: string, nullable: true }
+                folder: { type: string, nullable: true }
+                purpose: { type: string }
+                linkedEntityType: { type: string, nullable: true }
+                linkedEntityId: { type: string, nullable: true }
+                tenantId: { type: string, nullable: true }
+                uploadedBy: { type: string, nullable: true }
+      responses:
+        '201':
+          description: Created
+  /api/v1/files/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string }
+    get:
+      summary: Get one stored file metadata row
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not found
+    delete:
+      summary: Soft-delete stored file metadata
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not found
+  /api/v1/public/_meta:
+    get:
+      summary: Public API module metadata (version, identity headers)
+      responses:
+        '200':
+          description: OK
+  /api/v1/public/decrees:
+    get:
+      summary: Paginated public decree catalog
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+      responses:
+        '200':
+          description: OK
+  /api/v1/inspectors/_meta:
+    get:
+      summary: Inspector field API metadata
+      responses:
+        '200':
+          description: OK
+  /api/v1/inspectors/assignments:
+    get:
+      summary: List assignments for resolved inspector (requires dev header until JWT)
+      parameters:
+        - in: header
+          name: X-Inspector-User-Id
+          schema: { type: string }
+          description: Mongo ObjectId of inspector user (pre-auth)
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Missing inspector identity
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ApiSuccessHealth:
+      type: object
+      properties:
+        success: { type: boolean, example: true }
+        data:
+          type: object
+          properties:
+            service: { type: string }
+            status: { type: string, enum: [live] }
+            uptimeSec: { type: integer }
+    ApiSuccessPaginated:
+      type: object
+      properties:
+        success: { type: boolean, example: true }
+        data:
+          type: array
+          items: {}
+        meta:
+          type: object
+          properties:
+            page: { type: integer }
+            limit: { type: integer }
+            total: { type: integer }
+            totalPages: { type: integer }
+    ApiError:
+      type: object
+      properties:
+        success: { type: boolean, example: false }
+        message: { type: string }
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+            details: {}

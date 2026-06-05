@@ -1,0 +1,114 @@
+{
+  "description": "Stored file metadata (provider-agnostic). Binary content is addressed by provider + providerFileId and/or url.",
+  "linking": {
+    "linkedEntityType": "Discriminator string (see StoredEntityType): decree, decree_attachment, inspection_evidence, certificate, …",
+    "linkedEntityId": "Mongo ObjectId of the domain row that owns or references this file metadata row.",
+    "note": "Some domains also keep a foreign key on their own document (e.g. decree_attachments.fileId). This module stays the system of record for mime/size/provider metadata."
+  },
+  "createFileMetadata": {
+    "request": {
+      "method": "POST",
+      "path": "/api/v1/files",
+      "body": {
+        "originalName": "gazette.pdf",
+        "mimeType": "application/pdf",
+        "size": 1048576,
+        "provider": "imagekit",
+        "providerFileId": "file_abc123",
+        "url": "https://ik.imagekit.io/example/gazette.pdf",
+        "folder": "decrees/published",
+        "purpose": "decree_pdf",
+        "linkedEntityType": "decree",
+        "linkedEntityId": "6620f1f1f1f1f1f1f1f1f1f1",
+        "tenantId": "tenant-a",
+        "uploadedBy": "6620e0e0e0e0e0e0e0e0e0e0"
+      }
+    },
+    "response": {
+      "success": true,
+      "message": "File metadata created",
+      "data": {
+        "id": "6620f3f3f3f3f3f3f3f3f3f3",
+        "originalName": "gazette.pdf",
+        "mimeType": "application/pdf",
+        "size": 1048576,
+        "provider": "imagekit",
+        "providerFileId": "file_abc123",
+        "url": "https://ik.imagekit.io/example/gazette.pdf",
+        "folder": "decrees/published",
+        "purpose": "decree_pdf",
+        "linkedEntityType": "decree",
+        "linkedEntityId": "6620f1f1f1f1f1f1f1f1f1f1",
+        "uploadedBy": "6620e0e0e0e0e0e0e0e0e0e0",
+        "tenantId": "tenant-a",
+        "createdAt": "2026-04-19T12:00:00.000Z",
+        "updatedAt": "2026-04-19T12:00:00.000Z"
+      }
+    }
+  },
+  "listFileMetadata": {
+    "request": {
+      "method": "GET",
+      "path": "/api/v1/files?page=1&limit=20&purpose=decree_attachment&linkedEntityType=decree&linkedEntityId=6620f1f1f1f1f1f1f1f1f1f1&sort=-createdAt"
+    },
+    "response": {
+      "success": true,
+      "data": [],
+      "meta": {
+        "page": 1,
+        "limit": 20,
+        "total": 0,
+        "totalPages": 1
+      }
+    }
+  },
+  "getFileMetadata": {
+    "request": {
+      "method": "GET",
+      "path": "/api/v1/files/6620f3f3f3f3f3f3f3f3f3f3"
+    },
+    "response": {
+      "success": true,
+      "data": {
+        "id": "6620f3f3f3f3f3f3f3f3f3f3",
+        "originalName": "gazette.pdf",
+        "mimeType": "application/pdf",
+        "size": 1048576,
+        "provider": "imagekit",
+        "providerFileId": "file_abc123",
+        "url": "https://ik.imagekit.io/example/gazette.pdf",
+        "folder": "decrees/published",
+        "purpose": "decree_pdf",
+        "linkedEntityType": "decree",
+        "linkedEntityId": "6620f1f1f1f1f1f1f1f1f1f1",
+        "uploadedBy": null,
+        "tenantId": null,
+        "createdAt": "2026-04-19T12:00:00.000Z",
+        "updatedAt": "2026-04-19T12:00:00.000Z"
+      }
+    }
+  },
+  "deleteFileMetadata": {
+    "request": {
+      "method": "DELETE",
+      "path": "/api/v1/files/6620f3f3f3f3f3f3f3f3f3f3"
+    },
+    "response": {
+      "success": true,
+      "message": "File metadata deleted",
+      "data": { "ok": true }
+    }
+  },
+  "preUploadStub": {
+    "description": "Before a real object exists in ImageKit/S3, persist metadata with provider none and a client-generated providerFileId.",
+    "body": {
+      "originalName": "photo.jpg",
+      "mimeType": "image/jpeg",
+      "size": 0,
+      "provider": "none",
+      "providerFileId": "temp-550e8400-e29b-41d4-a716-446655440000",
+      "folder": "inspections/evidence/drafts",
+      "purpose": "inspection_evidence"
+    }
+  }
+}

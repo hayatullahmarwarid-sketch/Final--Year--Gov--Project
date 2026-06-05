@@ -1,0 +1,162 @@
+{
+  "module": "inspector-admin",
+  "basePath": "/api/v1/inspector-admin",
+  "notes": "RBAC: routes use authorize(['inspector_admin']) after authenticate(); set RBAC_ENFORCED=false in .env to bypass role checks locally.",
+  "examples": {
+    "POST /templates": {
+      "request": {
+        "name": "Mosque compliance checklist",
+        "description": "Standard field inspection for decree implementation.",
+        "isActive": true,
+        "sections": [
+          {
+            "sectionKey": "general",
+            "title": "General compliance",
+            "sortOrder": 0,
+            "items": [
+              {
+                "itemKey": "prayer_area",
+                "type": "checklist",
+                "label": "Prayer area meets requirements",
+                "required": true,
+                "options": [
+                  { "optionKey": "yes", "label": "Yes" },
+                  { "optionKey": "no", "label": "No" }
+                ],
+                "sortOrder": 0
+              }
+            ]
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "data": {
+          "id": "6610f2b2f2b2f2b2f2b2f2b2",
+          "name": "Mosque compliance checklist",
+          "revision": 1,
+          "isActive": true,
+          "sections": []
+        },
+        "message": "Template created"
+      }
+    },
+    "POST /assignments": {
+      "request": {
+        "templateId": "6610f2b2f2b2f2b2f2b2f2b2",
+        "decreeId": "6610f2b2f2b2f2b2f2b2f2b3",
+        "decreeVersionId": "6610f2b2f2b2f2b2f2b2f2b4",
+        "inspectorUserId": "6610f2b2f2b2f2b2f2b2f2b5",
+        "dueAt": "2026-05-01T12:00:00.000Z",
+        "priority": "high",
+        "region": "Kabul",
+        "notes": "Priority audit before public holiday."
+      },
+      "response": {
+        "success": true,
+        "data": {
+          "id": "6610f2b2f2b2f2b2f2b2f2b6",
+          "status": "assigned",
+          "templateRevisionSnapshot": 1,
+          "region": "Kabul",
+          "priority": "high"
+        },
+        "message": "Assignment created"
+      }
+    },
+    "POST /submissions/:id/return": {
+      "request": {
+        "notes": "Please attach photos for section \"general\" item \"prayer_area\".",
+        "score": null,
+        "reviewerUserId": null
+      },
+      "response": {
+        "success": true,
+        "data": {
+          "assignment": { "id": "6610f2b2f2b2f2b2f2b2f2b6", "status": "returned_for_revision", "revisionCount": 1 },
+          "submission": {
+            "id": "6610f2b2f2b2f2b2f2b2f2b7",
+            "review": {
+              "comment": "[Return 2026-04-19T10:00:00.000Z]\nPlease attach photos..."
+            }
+          }
+        },
+        "message": "Submission returned for revision"
+      }
+    },
+    "POST /submissions/:id/finalize": {
+      "request": {
+        "comment": "Approved — complete evidence on file.",
+        "score": 95,
+        "reviewerUserId": null
+      },
+      "response": {
+        "success": true,
+        "data": {
+          "assignment": {
+            "id": "6610f2b2f2b2f2b2f2b2f2b6",
+            "status": "finalized",
+            "reporting": {
+              "implementationSignals": {
+                "answerCount": 12,
+                "sectionsTouchedCount": 3,
+                "evidenceFileCount": 4
+              },
+              "reviewScore": 95
+            }
+          },
+          "submission": { "id": "6610f2b2f2b2f2b2f2b2f2b7", "approvedByUserId": null }
+        },
+        "message": "Submission finalized"
+      }
+    },
+    "PATCH /exams/:id": {
+      "request": {
+        "status": "scheduled",
+        "scheduledOpensAt": "2026-05-10T08:00:00.000Z",
+        "scheduledClosesAt": "2026-05-10T18:00:00.000Z"
+      },
+      "response": {
+        "success": true,
+        "data": {
+          "id": "6610f2b2f2b2f2b2f2b2f2b8",
+          "status": "scheduled"
+        },
+        "message": "Exam updated"
+      }
+    },
+    "POST /certificates/:id/revoke": {
+      "request": {
+        "reason": "Administrative revocation — duplicate issuance."
+      },
+      "response": {
+        "success": true,
+        "data": {
+          "id": "6610f2b2f2b2f2b2f2b2f2b9",
+          "status": "revoked",
+          "revokedAt": "2026-04-19T10:00:00.000Z",
+          "revokeReason": "Administrative revocation — duplicate issuance."
+        },
+        "message": "Certificate revoked"
+      }
+    },
+    "GET /dashboard": {
+      "response": {
+        "success": true,
+        "data": {
+          "generatedAt": "2026-04-19T10:00:00.000Z",
+          "assignments": {
+            "byStatus": { "assigned": 4, "submitted": 2, "finalized": 11 },
+            "pendingReviewCount": 2
+          },
+          "exams": { "byStatus": { "draft": 1, "open": 2 } },
+          "certificates": { "byStatus": { "issued": 120, "revoked": 3 } },
+          "implementationTrends": [
+            { "isoWeekYear": 2026, "isoWeek": 15, "finalizedCount": 3 },
+            { "isoWeekYear": 2026, "isoWeek": 16, "finalizedCount": 5 }
+          ]
+        }
+      }
+    }
+  }
+}
